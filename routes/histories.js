@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 router.use(bodyParser.urlencoded({ extended: true}));
 
@@ -34,34 +35,34 @@ router.post('/', function(req, res) {
 
 // select * from histories
 router.get('/', function(req, res) {
-  asset.find({}, function(err, assets) {
+  history.find({}, function(err, histories) {
     if (err) return res.status(500).send("[failed] select * from histories");
-    res.status(200).send(assets);
+    res.status(200).send(histories);
   });
 });
 
-// select * from histories where _id = :id
+// select * from histories where asst_no = :id
 router.get('/:id', function(req, res) {
-  asset.findById(req.params.id, function(err, asset) {
+  history.find( { asst_no: req.params.id }, function(err, history) {
     if (err) return res.status(500).send("[failed] select * from histories where _id = :id");
-    if (!asset) return res.status(404).send("[no returns] select * from histories where _id = :id");
-    res.status(200).send(asset);
+    // if (!history) return res.status(404).send("[no returns] select * from histories where _id = :id");
+    res.status(200).send(history);
   });
 });
 
 // delete from histories where _id = :id
 router.delete('/:id', function(req, res) {
-  User.findByIdAndRemove(req.params.id, function(err, asset) {
+  history.findByIdAndRemove(req.params.id, function(err, history) {
     if (err) return res.status(500).send("[failed] delete from histories where _id = :id")
-    res.status(200).send("asset " + asset.asst_nm + " deleted.");
+    res.status(200).send("history " + history.asst_nm + " deleted.");
   });
 });
 
 // update histories set { ... } where _id = :id
 router.put('/:id', function(req, res) {
-  User.findByIdAndUpdate(req.params.id, req.body, { new: true }, function(err, asset) {
+  history.findByIdAndUpdate(req.params.id, req.body, { new: true }, function(err, history) {
     if (err) return res.status(500).send("[failed] update histories set { ... } where _id = :id")
-    res.status(200).send(user);
+    res.status(200).send("history " + history.asst_nm + " updated.");
   });
 });
 
